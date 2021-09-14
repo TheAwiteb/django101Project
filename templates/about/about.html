@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .rtl {
+        margin: 23px;
+        padding: 23px;
+        font-size: 22px;
+        unicode-bidi: bidi-override;
+        direction: unset;
+        text-align:right;
+    }
+    .title {
+        margin-bottom: 23px;
+        padding-top: 2px;
+    }
+    .info {
+        padding: 23px;
+    }
+    a {
+        color: rgb(31, 73, 163);
+    }
+    a:hover {
+        color: rgb(22, 57, 133);
+    }
+</style>
+
+<div class="rtl">
+
+    <h3 class="title">وصف المشروع</h3>
+    <div class="border border-info info">
+
+        <p>
+            هذا المشروع الخاص بكورس جانقو 101 في <a href="https://satr.codes">منصة سطر</a>
+            <br>
+            وحاليا المشروع عبارة عن اضافة كورسات من <a target="_blank" href="admin">صفحة الادمن</a> وعرضها في <a target="_blank" href="Courses-list">صفحة عرض الكورسات</a>
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock content %}

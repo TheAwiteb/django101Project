@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .counter{
+        margin: 30px 30px 3px 0px;
+        padding-left: 4px;
+        padding-top: 20px;
+    }
+</style>
+
+<div>
+    <h3 class="text-center font-weight-bolder">
+        Courses list 
+    </h3>
+    <h5 class="counter text-dark">Courses count: <i>{{ courses_count }}</i></h5>
+    <div>
+        <ul class="list-group">
+            
+            {% for course in courses %}
+            <li class="list-group-item list-group-item-dark">
+                <span class="text-dark">Name: </span> {{ course.name }}
+                <br>
+                <span class="text-dark">Number: </span> {{ course.number }}
+            </li>
+            {% endfor %}
+            
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}
