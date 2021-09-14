@@ -20,9 +20,10 @@ django101Project is a project for Django 101 course on [satr.codes](https://satr
 •
 [Images](#Images)
 •
-[license](#License)
+[License](#License)
 
 ## Requirements
+
 * **[python3.8](https://www.python.org/downloads/) +**
 * **[git](https://git-scm.com/)**
 * **[pip3](https://pip.pypa.io/en/stable/installation/)**
@@ -32,10 +33,10 @@ django101Project is a project for Django 101 course on [satr.codes](https://satr
 Use [GitHub](https://github.com) to install django101Project.
 
 ```bash
-# clone bot form github
+# clone project form github
 git clone https://github.com/TheAwiteb/django101Project/
 
-# cd to bot folder
+# cd to project folder
 cd django101Project
 
 # install required packages
@@ -43,6 +44,7 @@ pip3 install -r requirements.txt
 ```
 
 ## Usage
+
 ```bash
 cd path/to/django101Project/
 
@@ -67,4 +69,5 @@ python3 manage.py runserver
 ![courses list small devicee](https://i.suar.me/QEr8O/l)
 
 ## License
+
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
