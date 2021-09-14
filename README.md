@@ -10,7 +10,7 @@
 </h1>
 </div>
 
-django101Project is a project for Django 101 course on [https://satr.codes](satr.codes)
+django101Project is a project for Django 101 course on [satr.codes](https://satr.codes)
 
 [Requirements](#Requirements)
 •
@@ -58,13 +58,13 @@ python3 manage.py runserver
 
 ## images
 
-courses list in large device
+**courses list in large device**
 
-![courses list large devicee]()
+![courses list large devicee](https://i.suar.me/ByWmd/l)
 
-courses list in small device
+**courses list in small device**
 
-![courses list small devicee]()
+![courses list small devicee](https://i.suar.me/QEr8O/l)
 
 ## License
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
