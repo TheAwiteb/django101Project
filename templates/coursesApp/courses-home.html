@@ -26,7 +26,7 @@
         <h3 class="text-center font-weight-bolder">
             Courses list 
         </h3>
-        <h5 class="counter text-dark">Courses count: <i>{{ courses|length }}</i></h5>
+        <h5 class="counter text-dark">Courses count: <i>{{ courses_count }}</i></h5>
         <!-- add courses button -->
         <button type="button" 
                 class="btn-text-right btn btn-outline-dark" 
@@ -49,6 +49,27 @@
             
         </ul>
     </div>
+    <nav aria-label="Search results pages" style="padding-top: 30px;">
+        <ul class="pagination pagination-sm justify-content-center">
+            
+            {% if is_paginated %}
+                <li class="page-item {% if not page_obj.has_previous %} disabled {% endif %}"><a class="page-link" href="?page=1">First</a></li>
+
+                {% for num in page_obj.paginator.page_range %}
+                    
+                    {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+
+                    <li class="page-item {% if num == page_obj.number %} active {% endif %}"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                    
+                    {% endif %}
+
+                {% endfor %}
+
+                <li class="page-item {% if not page_obj.has_next %} disabled {% endif %}"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+            {% endif %}
+                
+        </ul>
+    </nav>
 </div>
 
 <!-- add course form  -->
