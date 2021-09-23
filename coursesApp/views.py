@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Courses
+from .forms import AddCourceForm
 
-
-get_path_name = lambda request: request.path.strip("/")
+get_path_name = lambda request: request.path + "/"
 
 
 def coursesList(request):
@@ -14,6 +14,14 @@ def coursesList(request):
             Courses.objects.all().values(),
         )
     )
+    add_cource_form = AddCourceForm(data=request.POST or None, use_required_attribute=False)
     path = get_path_name(request)
-    context = {"path": path, "courses": courses, "courses_count": len(courses)}
+    context = {
+        "path": path,
+        "courses": courses,
+        "add_cource_form": add_cource_form,
+    }
+    if add_cource_form.is_valid():
+        add_cource_form.save()
+        return redirect("/Courses-list/", context=context)
     return render(request, "coursesApp/courses-home.html", context=context)
