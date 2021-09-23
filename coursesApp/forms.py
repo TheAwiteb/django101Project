@@ -9,14 +9,24 @@ class AddCourceForm(forms.ModelForm):
         labels = {"name": "", "number": ""}
         widgets = {
             "name": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Course Name", "id":"courseName", "onkeyup":"courseNameValidator()"}
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Course Name",
+                    "id": "courseName",
+                    "onkeyup": "courseNameValidator()",
+                }
             ),
             "number": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Course Number", "id":"courseNumber", "onkeyup":"courseNumebrValidator()"}
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Course Number",
+                    "id": "courseNumber",
+                    "onkeyup": "courseNumebrValidator()",
+                }
             ),
         }
         help_texts = {"name": None, "number": None}
-    
+
     def clean_name(self, *args, **kwargs):
         cleaned_data = super().clean()
         name = cleaned_data.get("name")

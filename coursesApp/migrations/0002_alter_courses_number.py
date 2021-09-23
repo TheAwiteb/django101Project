@@ -7,13 +7,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('coursesApp', '0001_initial'),
+        ("coursesApp", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='courses',
-            name='number',
-            field=models.PositiveSmallIntegerField(help_text='Number of the course.', validators=[django.core.validators.MinValueValidator(101), django.core.validators.MaxValueValidator(10000)]),
+            model_name="courses",
+            name="number",
+            field=models.PositiveSmallIntegerField(
+                help_text="Number of the course.",
+                validators=[
+                    django.core.validators.MinValueValidator(101),
+                    django.core.validators.MaxValueValidator(10000),
+                ],
+            ),
         ),
     ]

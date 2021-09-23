@@ -12,6 +12,8 @@
 
 django101Project is a project for Django 101 course on [satr.codes](https://satr.codes)
 
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
+
 [Requirements](#Requirements)
 •
 [Installation](#Installation)
