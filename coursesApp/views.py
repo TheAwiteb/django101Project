@@ -1,18 +1,18 @@
-from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from .models import Courses
 from .forms import AddCourceForm
 
-get_path_name = lambda request: request.path.strip("/") or "/"
+get_path_name = lambda request: request.path.strip("/")
 
 
 class CoursesListView(ListView):
     template_name = "coursesApp/courses-home.html"
     context_object_name = "courses"
     model = Courses
+    paginate_by = 7
 
     def get_queryset(self):
-        return list(
+        courses = list(
             map(
                 lambda dct: {
                     key: val.title() if key == "name" else val
@@ -21,6 +21,8 @@ class CoursesListView(ListView):
                 Courses.objects.all().order_by("-timestamp").values(),
             )
         )
+        self.courses_count = len(courses)
+        return courses
 
     def get(self, request, *args, **kwargs):
         self.add_cource_form = AddCourceForm(
@@ -43,4 +45,5 @@ class CoursesListView(ListView):
         context["add_cource_form"] = AddCourceForm(
             data=self.request.POST or None, use_required_attribute=False
         )
+        context["courses_count"] = self.courses_count
         return context
