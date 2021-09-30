@@ -45,6 +45,12 @@ class Profile(models.Model):
         else:
             return default_avatar_url.format(username=self.user.username)
 
+    def get_bio(self):
+        if self.bio:
+            return self.bio.title()
+        else:
+            return ''
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
