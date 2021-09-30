@@ -2,6 +2,10 @@ from django.views.generic.list import ListView
 from .models import Courses
 from .forms import AddCourceForm
 
+from django.contrib import messages
+
+from django.shortcuts import redirect
+
 get_path_name = lambda request: request.path.strip("/")
 
 
@@ -12,15 +16,7 @@ class CoursesListView(ListView):
     paginate_by = 7
 
     def get_queryset(self):
-        courses = list(
-            map(
-                lambda dct: {
-                    key: val.title() if key == "name" else val
-                    for key, val in dct.items()
-                },
-                Courses.objects.all().order_by("-timestamp").values(),
-            )
-        )
+        courses = Courses.objects.all().order_by("-timestamp")
         self.courses_count = len(courses)
         return courses
 
@@ -35,7 +31,18 @@ class CoursesListView(ListView):
             data=request.POST, use_required_attribute=False
         )
         if self.add_cource_form.is_valid():
-            self.add_cource_form.save()
+            instance = self.add_cource_form.save(commit=False)
+            instance.name = instance.name.capitalize()
+            if not Courses.objects.filter(
+                name=instance.name, number=instance.number
+            ).first():
+                instance.author = request.user
+                instance.save()
+            else:
+                messages.error(
+                    request,
+                    "{} - {} is already exists.".format(instance.name, instance.number),
+                )
         return super(CoursesListView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

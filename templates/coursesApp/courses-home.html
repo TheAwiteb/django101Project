@@ -1,22 +1,27 @@
 {% extends "base.html" %}
-{% block content %}
 {% load static %}
-<script src="{% static '/js/validation.js' %}"></script>
 
-<style>
-    .counter{
-        margin: 30px 30px 3px 0px;
-        padding-left: 4px;
-        padding-top: 20px;
-    }
-    .btn-text-right{
-        display:      block;
-        margin-left:  auto;
-        margin-right: 5px;
-        margin-bottom: 8px;
-    }
-    
-</style>
+{% block title %} Courses {% endblock title %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static '/css/pagination.css' %}">
+    <style>
+        .counter{
+            margin: 30px 30px 3px 0px;
+            padding-left: 4px;
+            padding-top: 20px;
+        }
+        .btn-text-right{
+            display:      block;
+            margin-left:  auto;
+            margin-right: 5px;
+            margin-bottom: 8px;
+        }
+        
+    </style>
+{% endblock style %}
+
+{% block content %}
 
 <div class="container">
     <h1>
@@ -29,133 +34,168 @@
         <h5 class="counter text-dark">Courses count: <i>{{ courses_count }}</i></h5>
         <!-- add courses button -->
         <button type="button" 
-                class="btn-text-right btn btn-outline-dark" 
-                data-toggle="modal" 
-                data-target="#formModal"
-                id="addbutton">
+                class="btn-text-right btn btn-outline-dark"
+                {% if request.user.is_authenticated %}
+                    data-toggle="modal" 
+                    data-target="#formModal"
+                    id="addbutton">
+                {% else %}
+                    data-container="body" 
+                    data-toggle="tooltip" 
+                    data-placement="bottom"
+                    title="To add course you needs SignIng your account">
+                {% endif %}
                 Add
         </button>
     </div>
-    <div>
-        <ul class="list-group">
-            
-            {% for course in courses %}
-            <li class="list-group-item list-group-item-dark">
-                <span class="text-dark">Name: </span> {{ course.name }}
-                <br>
-                <span class="text-dark">Number: </span> {{ course.number }}
-            </li>
-            {% endfor %}
-            
-        </ul>
+    <div class="row">
+        {% for course in courses %}
+            <div class="col-md-6 p-1">
+                <div class="card text-white bg-dark" style="min-height: 300px">
+                    <div class="card-header">
+                        <div class="row mx-0">
+                            <div class="col-6 mb-2">
+                                <b>{{ course.number }}</b>
+                            </div>
+                            {% if course.is_new %}
+                                <div class="col-6 text-lg-right">
+                                    <span class="badge badge-success">New</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.name }}</h5>
+                        <p class="card-text">{{ course.summary }}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Create by
+                        <a href="{% url 'profile' course.author %}"><b>{{ course.author }}</b></a> <br>
+                        <a href="#" class="btn btn-secondary">View</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    <nav aria-label="Search results pages" style="padding-top: 30px;">
-        <ul class="pagination pagination-sm justify-content-center">
-            
-            {% if is_paginated %}
-                <li class="page-item {% if not page_obj.has_previous %} disabled {% endif %}"><a class="page-link" href="?page=1">First</a></li>
-
-                {% for num in page_obj.paginator.page_range %}
-                    
-                    {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-
-                    <li class="page-item {% if num == page_obj.number %} active {% endif %}"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
-                    
-                    {% endif %}
-
-                {% endfor %}
-
-                <li class="page-item {% if not page_obj.has_next %} disabled {% endif %}"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
-            {% endif %}
+    {% if is_paginated %}
+        <nav aria-label="Search results pages" style="padding-top: 30px;">
+            <ul class="pagination pagination-sm justify-content-center">
                 
-        </ul>
-    </nav>
+                    <li class="page-item {% if not page_obj.has_previous %} disabled {% endif %}"><a class="page-link" href="?page=1">First</a></li>
+
+                    {% for num in page_obj.paginator.page_range %}
+                        
+                        {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+
+                        <li class="page-item {% if num == page_obj.number %} active {% endif %}"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                        
+                        {% endif %}
+
+                    {% endfor %}
+
+                    <li class="page-item {% if not page_obj.has_next %} disabled {% endif %}"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+            </ul>
+        </nav>
+    {% endif %}
 </div>
 
-<!-- add course form  -->
-<div class="modal fade show" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content dark-modal">
-            <div class="modal-header">
-                <h3 class="modal-title" id="formModalLabel">Add course</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form method="POST" id="addCourseForm" class="needs-validation" novalidate="">
-                {% csrf_token %}
-                <div class="modal-body">
-                    {% for input in add_cource_form %}
-                        <div class="form-group row">
-                            <div class="col-sm-9">
-                                {{ input }}
-                                <div class="invalid-feedback" id="{{ input.name }}Message">
-                                    
-                                    {% if input.name == 'name' %}
-                                        {{add_cource_form.errors.name.0}}
-                                    {% else %}
-                                        {{add_cource_form.errors.number.0}}
-                                    {% endif %}
-                                    
+
+{% if request.user.is_authenticated %}
+
+    <!-- add course form  -->
+    <div class="modal fade show" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content dark-modal">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="formModalLabel">Add course</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" id="addCourseForm" class="needs-validation" novalidate="">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {% for input in add_cource_form %}
+                            <div class="form-group row">
+                                <div class="col-sm-9">
+                                    {{ input }}
+                                    <div class="invalid-feedback" id="{{ input.name }}Message">
+                                        
+                                        {% if input.name == 'name' %}
+                                            {{add_cource_form.errors.name.0}}
+                                        {% else %}
+                                            {{add_cource_form.errors.number.0}}
+                                        {% endif %}
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <div class="form-check" is="checkbox">
+                                <input class="form-check-input" type="checkbox" id="testPageCheck" onclick="checkValidation()">
+                                <label class="form-check-label" for="testPageCheck">
+                                    I agree it's a test page
+                                </label>
+                                <div class="invalid-feedback">
+                                    You must agree before submitting.
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
-                    <div class="form-group">
-                        <div class="form-check" is="checkbox">
-                            <input class="form-check-input" type="checkbox" id="testPageCheck" onclick="checkValidation()">
-                            <label class="form-check-label" for="testPageCheck">
-                                I agree it's a test page
-                            </label>
-                            <div class="invalid-feedback">
-                                You must agree before submitting.
-                            </div>
-                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-
-
-{% if add_cource_form.errors %}
-
-    {% if add_cource_form.errors.name %}
-
-        <script>
-            function buttonclick(){
-                let elm = document.getElementById("courseName");
-                elm.classList.add("is-invalid");
-                var addbutton = document.getElementById("addbutton");
-                addbutton.click();
-            }
-            document.onload = buttonclick();
-            window.onload = buttonclick(); 
-        </script>
-
-    {% endif %}
-
-    {% if add_cource_form.errors.number %}
-    
-        <script>
-            function buttonclick(){
-                let elm = document.getElementById("courseNumber");
-                elm.classList.add("is-invalid");
-                var addbutton = document.getElementById("addbutton");
-                addbutton.click();
-            }
-            document.onload = buttonclick();
-            window.onload = buttonclick(); 
-        </script>
-
-    {% endif %}
-
-
 {% endif %}
-    
+
 {% endblock content %}
+
+{% block script %}
+
+    <script src="{% static '/js/validation.js' %}"></script>
+
+    {% if add_cource_form.errors %}
+
+        {% if add_cource_form.errors.name %}
+
+            <script>
+                function buttonclick(){
+                    let elm = document.getElementById("courseName");
+                    elm.classList.add("is-invalid");
+                    var addbutton = document.getElementById("addbutton");
+                    addbutton.click();
+                }
+                document.onload = buttonclick();
+                window.onload = buttonclick(); 
+            </script>
+
+        {% endif %}
+
+        {% if add_cource_form.errors.number %}
+        
+            <script>
+                function buttonclick(){
+                    let elm = document.getElementById("courseNumber");
+                    elm.classList.add("is-invalid");
+                    var addbutton = document.getElementById("addbutton");
+                    addbutton.click();
+                }
+                document.onload = buttonclick();
+                window.onload = buttonclick(); 
+            </script>
+
+        {% endif %}
+
+
+    {% endif %}
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock script %}

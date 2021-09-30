@@ -1,29 +1,35 @@
 {% extends "base.html" %}
-{% block content %}
+{% block title %}
+    About project
+{% endblock title %}
 
-<style>
-    .rtl {
-        margin: 23px;
-        padding: 23px;
-        font-size: 22px;
-        unicode-bidi: bidi-override;
-        direction: unset;
-        text-align:right;
-    }
-    .title {
-        margin-bottom: 23px;
-        padding-top: 2px;
-    }
-    .info {
-        padding: 23px;
-    }
-    a {
-        color: rgb(31, 73, 163);
-    }
-    a:hover {
-        color: rgb(22, 57, 133);
-    }
-</style>
+{% block style %}
+    <style>
+        .rtl {
+            margin: 23px;
+            padding: 23px;
+            font-size: 22px;
+            unicode-bidi: bidi-override;
+            direction: unset;
+            text-align:right;
+        }
+        .title {
+            margin-bottom: 23px;
+            padding-top: 2px;
+        }
+        .info {
+            padding: 23px;
+        }
+        a {
+            color: rgb(31, 73, 163);
+        }
+        a:hover {
+            color: rgb(22, 57, 133);
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
 
 <div class="rtl">
 

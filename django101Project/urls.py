@@ -17,9 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+handler404 = "django101Project.views.handler404"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.home, name="home"),
-    path("Courses-list/", include("coursesApp.urls"), name="courses-list"),
-    path("About/", views.about, name="about"),
-]
+    path("", views.home, name="Home"),
+    path("courses/", include("coursesApp.urls")),
+    path("about/", views.about, name="About"),
+    path("user/<str:username>", views.profile, name="profile"),
+    path("registration/", include("registration.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,7 +5,7 @@ from .models import Courses
 class AddCourceForm(forms.ModelForm):
     class Meta:
         model = Courses
-        fields = "__all__"
+        fields = ("name", "number")
         labels = {"name": "", "number": ""}
         widgets = {
             "name": forms.TextInput(

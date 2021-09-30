@@ -6,16 +6,23 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        
+
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <title>{% block title %}  {% endblock title %}</title>
         
-        <link rel="stylesheet" href="{% static '/css/pagination.css' %}">
+        {% block style %}
+            
+        {% endblock style %}
+        <link rel="stylesheet" href="{% static '/css/main.css' %}">
         <style>
             body {
             background-color: hsl(0, 0%, 79%);
@@ -29,7 +36,7 @@
     <body>
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
             <a class="navbar-brand" href="/">
-            <img src="https://i.suar.me/z7aA4" width="50" height="60" >
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.flaticon.com%2Ficons%2Fpng%2F512%2F171%2F171322.png&f=1&nofb=1" width="50" height="60" >
             Django101
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +44,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
-                    {% with "Home Courses-list About" as navitems %}
+                    {% with "Home Courses About" as navitems %}
                         {% for item in navitems.split %}
                             <li class="nav-item 
                             {% if path == '/' and item == 'Home' or item == path %}
@@ -45,26 +52,65 @@
                             {% endif %}
                                 ">
                                 <a class="nav-link" href="
-                                {% ifequal item 'Home' %} 
-                                    /
-                                {% else %}
-                                    /{{ item }}/
-                                {% endifequal %}
+                                    {% url item %}
                                     ">{{ item }} </a>
                             </li>
                         {% endfor %}
                     {% endwith %}
                 </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="register">Register</a>
-                    </li>
-                </ul>
+                
+                {% if request.user.is_anonymous %}
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" 
+                                href="{% url 'registration' %}">
+                                Sign in
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" 
+                                href="{% url 'registration' %}">
+                                Sign Up
+                            </a>
+                        </li>
+                    </ul>
+
+                {% else %}
+
+                    <div class="dropdown show">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
+                            <img src="{{ request.user.profile.avatar }}" class="rounded-circle" width="30" height="30">
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <small>
+                                <div class="dropdown-header">Signed in as <br>
+                                    <span class="font-weight-bold text-dark">{{ request.user.username }}</span>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'profile' request.user.username %}">Profile</a>
+                                <a class="dropdown-item" href="">Setting</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'signout' %}">Sign Out</a>
+                            </small>
+                        </div>
+                    </div>
+
+                {% endif %}
             </div>
         </nav>
+
+        {% if messages %}
+            <div class="alert-side">
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                        <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         {% block content %}
         {% endblock content %}
@@ -111,5 +157,9 @@
         </div>
         <!-- Copyright -->
     </footer>
+    
+    {% block script %}
+
+    {% endblock script %}
     </body>
 </html>

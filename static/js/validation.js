@@ -8,6 +8,10 @@ function courseNameValidator() {
         courseName.classList.add("is-invalid");
         courseNameErrorMessage.innerHTML = "Please choose a course name.";
     }
+    else if (courseName.value.length > 50) {
+        courseName.classList.add("is-invalid");
+        courseNameErrorMessage.innerHTML = "The course name is large, the maximum limit is 50 characters.";
+    }
     else if (!isNaN(courseName.value)) {
         courseName.classList.add("is-invalid");
         courseNameErrorMessage.innerHTML = "Enter a whole course name.";

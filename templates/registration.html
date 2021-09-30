@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+{% load startswith %}
+{% load key %}
+
+{% block title %} Registration {% endblock title %}
+
+{% block style %}
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="{% static 'css/signin.css' %}">
+{% endblock style %}
+
+{% block content %}
+
+
+<div id="logreg-forms">
+    <form method="POST" action="{% url 'registration' %}?form=signin" class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign in</h1>
+        {% csrf_token %}
+        {% for input in signin_form %}
+            <div class="form-group row">
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        {% if input.name|startswith:'username' %} 
+                            <i class="input-group-text fa fa-user" aria-hidden="true"></i> 
+                        {% elif input.name|startswith:'password' %}
+                            <i class="input-group-text fa fa-unlock-alt" aria-hidden="true"></i>
+                        {% endif %}
+                        {{ input }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        
+        <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+        <a href="" id="forgot_pswd">Forgot password?</a>
+        <hr>
+        <button class="btn btn-primary btn-block" type="button" id="btn-signup"><i class="fas fa-user-plus"></i> Sign up New Account</button>
+        </form>
+
+        <form action="/reset/password/" class="form-reset">
+            {% csrf_token %}
+            <input type="email" id="resetEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            <button class="btn btn-primary btn-block" type="submit">Reset Password</button>
+            <a href="" id="cancel_reset"><i class="fas fa-angle-left"></i> Back</a>
+        </form>
+        
+        <form method="POST" action="{% url 'registration' %}?form=signup" class="form-signup">
+            <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign up</h1>
+            {% csrf_token %}
+            {% for input in signup_form %}
+                <div class="form-group row">
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            {% if input.name|startswith:'username' %} 
+                                <i class="input-group-text fa fa-user" aria-hidden="true"></i> 
+                            {% elif input.name|startswith:'password' %}
+                                <i class="input-group-text fa fa-unlock-alt" aria-hidden="true"></i>
+                            {% elif input.name|startswith:'email' %}
+                                <i class="input-group-text fa fa-envelope" aria-hidden="true" style="font-size: 11px;"></i>
+                            {% endif %}
+                            {{ input }}
+                            {{ input.help_text }}
+                            <div class="invalid-feedback ml-5" id="{{ input.name }}Message">
+                                {% for error in signup_form.errors|key:input.name %}
+                                    {{error}}
+                                    <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
+            <a href="" id="cancel_signup"><i class="fas fa-angle-left"></i> Back</a>
+        </form>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+
+    {% if signup_form.errors and form == 'signup' %}
+        
+            <script>
+                function showingErrors(){
+                    {% for fild_name in signup_form.errors %}
+                        let signup_{{ fild_name }} = document.getElementById("signup_{{ fild_name }}");
+                        signup_{{ fild_name }}.classList.add("is-invalid");
+                    {% endfor %}
+                    let signupButton = document.getElementById("btn-signup");
+                    signupButton.click();
+                }
+                document.onload = showingErrors();
+                window.onload = showingErrors(); 
+            </script>
+        
+    {% endif %}
+
+
+    <script src="{% static '/js/validation.js' %}"></script>
+    <script src="{% static 'js/registration.js' %}"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% endblock script %}
