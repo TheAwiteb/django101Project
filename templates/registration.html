@@ -60,7 +60,6 @@
                                 <i class="input-group-text fa fa-envelope" aria-hidden="true" style="font-size: 11px;"></i>
                             {% endif %}
                             {{ input }}
-                            {{ input.help_text }}
                             <div class="invalid-feedback ml-5" id="{{ input.name }}Message">
                                 {% for error in signup_form.errors|key:input.name %}
                                     {{error}}
