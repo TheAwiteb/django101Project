@@ -1,6 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.http import Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
+
+from django.contrib import messages
+
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 get_path_name = lambda request: request.path.strip("/") or "/"
 
@@ -34,3 +40,39 @@ def handler404(request, exception):
     )
     response.status_code = 404
     return response
+
+
+class Settings(LoginRequiredMixin, TemplateView):
+    template_name = "user/user-settings.html"
+
+    def get(self, request):
+        self.user_form = UserUpdateForm(instance=request.user)
+        self.profile_form = ProfileUpdateForm(instance=request.user.profile)
+        return super().render_to_response(self.get_context_data())
+
+    def post(self, request):
+        self.user_form = UserUpdateForm(request.POST, instance=request.user)
+        self.profile_form = ProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.profile
+        )
+
+        if self.profile_form.is_valid() and self.user_form.is_valid():
+            instance = self.profile_form.save(commit=False)
+            if User.objects.filter(email=instance.user.email).first():
+                messages.error(request, "Email is taken.")
+            else:
+                instance.save()
+                self.user_form.save()
+                messages.success(request, "Profile updated successfully.")
+        else:
+            if self.user_form.errors.get("username"):
+                messages.error(request, "Username is taken.")
+            else:
+                messages.error(request, "Profile update unsuccessful.")
+        return redirect("/settings/")
+
+    def get_context_data(self, **kwargs):
+        context = super(Settings, self).get_context_data(**kwargs)
+        context.update(**kwargs)
+        context["forms"] = self.user_form, self.profile_form
+        return context

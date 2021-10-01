@@ -44,7 +44,9 @@ class Registration(TemplateView):
                     if self.signin_form.is_valid():
                         username = self.signin_form.cleaned_data.get("username")
                         password = self.signin_form.cleaned_data.get("password")
-                        user = authenticate(username=username.capitalize(), password=password)
+                        user = authenticate(
+                            username=username.capitalize(), password=password
+                        )
                         login(request, user)
                         messages.success(request, "You are logged in successfully.")
                         return redirect("/")

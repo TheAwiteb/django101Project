@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'profile' request.user.username %}">Profile</a>
-                                <a class="dropdown-item" href="">Setting</a>
+                                <a class="dropdown-item" href="{% url 'settings' %}">Setting</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'signout' %}">Sign Out</a>
                             </small>

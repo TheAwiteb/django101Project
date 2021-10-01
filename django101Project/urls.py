@@ -26,6 +26,7 @@ handler404 = "django101Project.views.handler404"
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name="Home"),
+    path("settings/", views.Settings.as_view(), name="settings"),
     path("courses/", include("coursesApp.urls")),
     path("about/", views.about, name="About"),
     path("user/<str:username>", views.profile, name="profile"),

@@ -13,11 +13,14 @@ import os
 from shutil import rmtree
 
 default_avatar_url = "https://avatars.dicebear.com/api/initials/:{username}.svg"
-random_string = lambda: ''.join(choice(ascii_letters+digits) for _ in range(22))
+random_string = lambda: "".join(choice(ascii_letters + digits) for _ in range(22))
+
 
 def user_avatar_directory_path(instance, _=None):
     avatar_name = f"users/avatars/{instance.user.id}/{random_string()}.png"
-    dir_path = os.path.join(settings.MEDIA_ROOT, 'users', 'avatars', str(instance.user.id))
+    dir_path = os.path.join(
+        settings.MEDIA_ROOT, "users", "avatars", str(instance.user.id)
+    )
 
     # django doesn't write on the image so we have to delete it manually before giving it a name
     if os.path.exists(dir_path):
@@ -49,7 +52,7 @@ class Profile(models.Model):
         if self.bio:
             return self.bio.title()
         else:
-            return ''
+            return ""
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
