@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} {{course.slug}} {% endblock title %}
+
+{% block content %}
+
+    <duv class="container">
+        <div class="text-center mt-5">
+            <h2>
+                {{course.name}}
+            </h2>
+            <h4>
+                {{course.number}}
+            </h4>
+            <h5>
+                <div style="max-height: 200px;">
+                    <p>
+                        {{course.description_or_nothing}}
+                    </p>
+                </div>
+            </h5>
+        </div>
+    </duv>
+
+{% endblock content %}

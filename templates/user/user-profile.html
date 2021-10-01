@@ -89,7 +89,7 @@
                             <div>
                                 <div class="list-group">
                                     {% for course in user.courses_set.all %}
-                                        <a href="#" class="list-group-item list-group-item-action list-group-item-dark mb-2">
+                                        <a href="{% url 'course' pk=course.pk %}" class="list-group-item list-group-item-action list-group-item-dark mb-2">
                                             {{course.name}}
                                             <br>
                                             <small>{{course.number}}</small>

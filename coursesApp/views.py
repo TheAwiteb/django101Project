@@ -1,4 +1,4 @@
-from django.views.generic.list import ListView
+from django.views.generic import DetailView, ListView
 from .models import Courses
 from .forms import AddCourceForm
 
@@ -43,7 +43,7 @@ class CoursesListView(ListView):
                     request,
                     "{} - {} is already exists.".format(instance.name, instance.number),
                 )
-        return super(CoursesListView, self).get(request, *args, **kwargs)
+        return redirect('/courses/')
 
     def get_context_data(self, **kwargs):
         context = super(CoursesListView, self).get_context_data(**kwargs)
@@ -54,3 +54,9 @@ class CoursesListView(ListView):
         )
         context["courses_count"] = self.courses_count
         return context
+
+
+class CourseDetailView(DetailView):
+    model = Courses
+    template_name = "coursesApp/courses-course.html"
+    context_object_name = "course"

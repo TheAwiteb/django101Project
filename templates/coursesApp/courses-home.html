@@ -70,8 +70,8 @@
                     </div>
                     <div class="card-footer text-muted">
                         Create by
-                        <a href="{% url 'profile' course.author %}"><b>{{ course.author }}</b></a> <br>
-                        <a href="#" class="btn btn-secondary">View</a>
+                    <a href="{% url 'profile' pk=course.author %}"><b>{{ course.author }}</b></a> <br>
+                        <a href="{% url 'course' course.pk %}" class="btn btn-secondary">View</a>
                     </div>
                 </div>
             </div>
