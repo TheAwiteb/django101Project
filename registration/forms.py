@@ -29,7 +29,7 @@ class signinForm(forms.Form):
     def clean(self, *args, **kwargs):
         username = self.cleaned_data["username"]
         password = self.cleaned_data["password"]
-        user = authenticate(username=username, password=password)
+        user = authenticate(username=username.capitalize(), password=password)
         if user and user.is_active:
             return super(signinForm, self).clean(*args, **kwargs)
         raise forms.ValidationError("Username or password is incorrect.")
@@ -107,7 +107,7 @@ class signupForm(UserCreationForm):
                 raise forms.ValidationError("Username is very large.")
             elif username.isdigit() or username.isnumeric() or username.isdecimal():
                 raise forms.ValidationError("Username is invalid.")
-            return username
+            return username.capitalize()
         else:
             raise forms.ValidationError(
                 "Username is very short, it must be more than three characters."
