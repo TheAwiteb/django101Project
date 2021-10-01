@@ -57,8 +57,7 @@ class Registration(TemplateView):
                         request, "Sorry, you have crossed your allowed attempts."
                     )
                 return redirect("/registration/")
-        else:
-            return redirect("/")
+        return redirect("/")
 
     def get_context_data(self, **kwargs):
         context = super(Registration, self).get_context_data(**kwargs)
