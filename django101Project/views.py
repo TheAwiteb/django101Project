@@ -50,6 +50,14 @@ class Settings(LoginRequiredMixin, TemplateView):
         self.profile_form = ProfileUpdateForm(instance=request.user.profile)
         return super().render_to_response(self.get_context_data())
 
+    def is_changed(self, user, instance):
+        username_is_changed = user.username != instance.user.username
+        email_is_changed = user.email != instance.user.email
+        bio_is_changed = user.profile.bio != instance.bio
+        avatar_is_changed = user.profile.avatar() != instance.avatar()
+        print(locals().values())
+        return any(filter(lambda vlaue: type(vlaue) is bool, locals().values()))
+    
     def post(self, request):
         self.user_form = UserUpdateForm(request.POST, instance=request.user)
         self.profile_form = ProfileUpdateForm(
@@ -58,12 +66,15 @@ class Settings(LoginRequiredMixin, TemplateView):
 
         if self.profile_form.is_valid() and self.user_form.is_valid():
             instance = self.profile_form.save(commit=False)
-            if User.objects.filter(email=instance.user.email).first():
+            if (user := User.objects.filter(email=instance.user.email).first()) and user.id != instance.user.id:
                 messages.error(request, "Email is taken.")
             else:
-                instance.save()
-                self.user_form.save()
-                messages.success(request, "Profile updated successfully.")
+                if self.is_changed(user, instance):
+                    instance.save()
+                    self.user_form.save()
+                    messages.success(request, "Profile updated successfully.")
+                else:
+                    messages.warning(request, "Nothing be changed.")
         else:
             if self.user_form.errors.get("username"):
                 messages.error(request, "Username is taken.")
