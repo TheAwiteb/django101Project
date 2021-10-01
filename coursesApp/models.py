@@ -25,8 +25,10 @@ class Courses(models.Model):
     )
 
     def is_new(self):
-        print(self.timestamp)
         return self.timestamp >= (datetime.now(tz=UTC) - timedelta(1))
+
+    def description_or_nothing(self):
+        return self.description or ''
 
     def __str__(self):
         return f"{self.name} - {self.number}"
