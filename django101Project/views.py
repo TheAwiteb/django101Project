@@ -24,8 +24,7 @@ def about(request):
 
 
 def profile(request, username):
-
-    user = User.objects.filter(username=username).first()
+    user = User.objects.filter(username=username.capitalize()).first()
     context = {"user": user}
     if user:
         return render(request, "user/user-profile.html", context=context)
