@@ -4,8 +4,6 @@ from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
-from django.contrib.auth.decorators import login_required
-
 from django.contrib.auth import login, authenticate
 
 
@@ -61,7 +59,6 @@ class Settings(LoginRequiredMixin, TemplateView):
         email_is_changed = user.email != instance.user.email
         bio_is_changed = user.profile.bio != instance.bio
         avatar_is_changed = user.profile.avatar() != instance.avatar()
-        print(locals().values())
         return any(filter(lambda vlaue: type(vlaue) is bool, locals().values()))
 
     def post(self, request, *args, **kwargs):
