@@ -43,7 +43,7 @@ class CoursesListView(ListView):
                     request,
                     "{} - {} is already exists.".format(instance.name, instance.number),
                 )
-        return redirect('/courses/')
+        return redirect("/courses/")
 
     def get_context_data(self, **kwargs):
         context = super(CoursesListView, self).get_context_data(**kwargs)
