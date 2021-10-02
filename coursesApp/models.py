@@ -12,6 +12,7 @@ from django.utils.text import slugify
 
 from django.contrib.auth.models import User
 
+from past_date2word import past_date2word
 
 class Courses(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -31,6 +32,9 @@ class Courses(models.Model):
 
     def is_new(self):
         return self.timestamp >= (datetime.now(tz=UTC) - timedelta(1))
+
+    def creation_time(self):
+        return past_date2word(self.timestamp)
 
     def description_or_nothing(self):
         return self.description or ""

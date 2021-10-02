@@ -90,7 +90,7 @@
                                 <div class="list-group">
                                     {% for course in user.courses_set.all %}
                                         <a href="{% url 'course' slug=course.slug %}" class="list-group-item list-group-item-action list-group-item-dark mb-2">
-                                            {{course.name}}
+                                            {{course.name}} <small class="text-muted">{{ course.creation_time }}</small>
                                             <br>
                                             <small>{{course.number}}</small>
                                         </a>
