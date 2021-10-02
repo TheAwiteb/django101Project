@@ -70,7 +70,7 @@ class PasswordUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = []
-        labels = {"new_password2":"repeat new password"}
+        labels = {"new_password2": "Repeat new password"}
 
     def clean(self, *args, **kwargs):
         user = self.user
