@@ -99,6 +99,10 @@ class Settings(LoginRequiredMixin, TemplateView):
             else:
                 messages.error(request, "Password was not changed successfully.")
                 return super(Settings, self).get(request, *args, **kwargs)
+        elif self.form == "delete_account":
+            user = request.user
+            user.delete()
+            return redirect('/')
         return redirect("/settings/")
 
     def get_context_data(self, **kwargs):
