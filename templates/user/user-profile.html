@@ -97,6 +97,11 @@
                                             <br>
                                             <small>{{course.number}}</small>
                                         </a>
+                                    {% empty %}
+                                        <h5 class="text-white">
+                                            <i class="fa fa-exclamation" aria-hidden="true"></i>
+                                            No course has been published from this user.
+                                        </h5>
                                     {% endfor %}
                                 </div>
                             </div>
