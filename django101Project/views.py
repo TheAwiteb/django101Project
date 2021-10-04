@@ -102,7 +102,7 @@ class Settings(LoginRequiredMixin, TemplateView):
         elif self.form == "delete_account":
             user = request.user
             user.delete()
-            return redirect('/')
+            return redirect("/")
         return redirect("/settings/")
 
     def get_context_data(self, **kwargs):

@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 
 from past_date2word import past_date2word
 
+
 class Courses(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, null=False, help_text="Name of the course.")
