@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -27,12 +27,9 @@ def about(request):
 
 
 def profile(request, username):
-    user = User.objects.filter(username=username.capitalize()).first()
+    user = get_object_or_404(User, username=username.capitalize())
     context = {"user": user}
-    if user:
-        return render(request, "user/user-profile.html", context=context)
-    else:
-        raise Http404
+    return render(request, "user/user-profile.html", context=context)
 
 
 def handler404(request, exception):
