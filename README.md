@@ -12,17 +12,21 @@
 
 django101Project is a project for Django 101 course on [satr.codes](https://satr.codes)
 
-![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
 
 [Requirements](#Requirements)
 •
 [Installation](#Installation)
+•
+[Features](#Features)
 •
 [Usage](#Usage)
 •
 [Images](#Images)
 •
 [License](#License)
+
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
+
 
 ## Requirements
 
@@ -45,6 +49,21 @@ cd django101Project
 pip3 install -r requirements.txt
 ```
 
+## Features
+* Sign in and out
+* List of courses
+* You need to login to add a course
+* User settings
+* change Password
+* Update profile information
+* Default avatar for each user by [avatars.dicebear.com](https://avatars.dicebear.com/)
+* The account can be deleted
+* Profile for each course
+* The name of the person who added the course
+* Pagination for the list of courses
+* Date of creation of the account in the profile
+
+
 ## Usage
 
 ```bash
@@ -62,13 +81,18 @@ python3 manage.py runserver
 
 ## images
 
-**courses list in large device**
+![courses page](https://i.suar.me/qKrJY/l)
 
-![courses list large devicee](https://i.suar.me/ByWmd/l)
+![pagination]()
 
-**courses list in small device**
+![delete account](https://i.suar.me/1Zyqy/l)
 
-![courses list small devicee](https://i.suar.me/QEr8O/l)
+![update profile](https://i.suar.me/23yeW/l)
+
+![change password](https://i.suar.me/lKOy0/l)
+
+![user profile](https://i.suar.me/a2789/l)
+
 
 ## License
 
