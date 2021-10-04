@@ -100,7 +100,10 @@
                 {% endif %}
             </div>
         </nav>
-
+        
+        {% block content %}
+        {% endblock content %}
+        
         {% if messages %}
             <div class="alert-side">
                 {% for message in messages %}
@@ -112,8 +115,6 @@
             </div>
         {% endif %}
 
-        {% block content %}
-        {% endblock content %}
 
     <div style="margin-bottom: 50px"></div>
     <footer class="text-center text-white" style="background-color: #929292; margin-top: auto;">
