@@ -66,6 +66,9 @@
                 <!--  <span class="dots"><i class="fa fa-check"></i></span> -->
             </div>
             <div class="mt-2">
+                <span>
+                    {{ user.date_joined|date}}
+                </span>
                 <p>
                     {{user.profile.get_bio}}
                 </p>
