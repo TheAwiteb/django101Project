@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # Own apps
     "coursesApp.apps.CoursesappConfig",
     "registration.apps.RegistrationConfig",
+    "lib",
 ]
 
 MIDDLEWARE = [
