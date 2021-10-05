@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.http import Http404
+from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
@@ -11,28 +11,56 @@ from django.contrib import messages
 
 from .forms import UserUpdateForm, ProfileUpdateForm, PasswordUpdateForm
 
+# ارجاع المسار الخاص بالصفحة
 get_path_name = lambda request: request.path.strip("/") or "/"
 
 
-def home(request):
+def home(request) -> HttpResponse:
+    """عرض الصفحة الرئيسية
+
+    المخرجات:
+        HttpResponse: الصفحة الرئيسية
+    """
+    # جلب مسار الصفخة
     path = get_path_name(request)
+    # وضع المسار في المتغيرات الخاصة بالصفحة
     context = {"path": path}
+    # ارجاع الصفخة الرئيسية
     return render(request, "home/home.html", context=context)
 
 
-def about(request):
+def about(request) -> HttpResponse:
+    # جلب مسار الصفحة
     path = get_path_name(request)
+    # وضع المسار في المتغيرات الخاصة بالصفحة
     context = {"path": path}
+    # ارجاع صفخة النبذة
     return render(request, "about/about.html", context=context)
 
 
-def profile(request, username):
+def profile(request, username: str) -> HttpResponse:
+    """عرض البروفايل الخاص باليوزر
+
+    المعطيات:
+        username (str): اسم المستخدم المراد جلب بروفايله
+
+    الاخطاء:
+        404: عدم وجود المستخدم
+
+    المخرجات:
+        HttpResponse: الصفحة الرئيسية
+    """
     user = get_object_or_404(User, username=username.capitalize())
     context = {"user": user}
     return render(request, "user/user-profile.html", context=context)
 
 
-def handler404(request, exception):
+def handler404(request, exception) -> HttpResponse:
+    """ارجاع صفخة 404
+
+    Returns:
+        HttpResponse: صفخة 404
+    """
     response = render(
         request,
         "errors/404.html",
@@ -42,20 +70,44 @@ def handler404(request, exception):
 
 
 class Settings(LoginRequiredMixin, TemplateView):
+    """اعدادات المستخدم يمكن خلالها
+    1- تحديث البيانات الشخصية الخاصة بالمستخدم
+    2- وتغير كلمة المرور
+    3- وحذف الحساب الشخصي
+    """
+
+    # الصفخة الخاصة بالاعدادات
     template_name = "user/user-settings.html"
 
     def get(self, request, *args, **kwargs):
+        # الفورم الخاص بتحديث البيانات الشخصية الخاصة بالمستخدم
         self.user_form = UserUpdateForm(instance=request.user)
+        # الفورم الخاص بتحديث البروفايل الخاص بالمستخدم
         self.profile_form = ProfileUpdateForm(instance=request.user.profile)
+        # الفورم الخاص بتغير الباسورد
         self.password_form = PasswordUpdateForm()
+        # يتم حفط في هذا المتغير الفورم الذي قام المستخدم بملئه وفي هاذه الحالة لم يقوم النستخدم بملئ اي فورم
         self.form = None
         return super(Settings, self).get(request, *args, **kwargs)
 
-    def is_changed(self, user, instance):
+    def is_changed(self, user: User, instance: User) -> bool:
+        """تقوم هاذه الميثود بالمقارنة بين بيانات المستخدم قبل وبعد التغير وترجع اذا تم اجراء اي تغير عليها ام لا
+
+        Args:
+            user (User): المستخدم قبل التغير.
+            instance (User): المستخدم بعد التغير.
+        Returns:
+            [bool]: تم اجراء تغير على بيانات المستخدم ام لا.
+        """
+        # المقارنة بين اسم المستخدم القديم والجديد
         username_is_changed = user.username != instance.user.username
+        # المقارنة بين الايميل القديم والجديد
         email_is_changed = user.email != instance.user.email
+        # المقارنة بالبايو القديم والجديد
         bio_is_changed = user.profile.bio != instance.bio
+        # المقارنة بالصورة الرمزية القديمة الجديدة
         avatar_is_changed = user.profile.avatar() != instance.avatar()
+        # ارجاع  صحيح ان وجد من المتغيرات المحلية المنطقية وهي التي تم تعريفها في الاعلى
         return any(filter(lambda vlaue: type(vlaue) is bool, locals().values()))
 
     def post(self, request, *args, **kwargs):
